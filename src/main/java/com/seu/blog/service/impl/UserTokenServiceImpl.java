@@ -1,5 +1,6 @@
 package com.seu.blog.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -24,8 +25,10 @@ import java.util.Map;
  */
 @Service("userTokenService")
 public class UserTokenServiceImpl extends ServiceImpl<UserTokenDao, UserTokenEntity> implements UserTokenService {
-    //12小时后过期 单位秒
-    private final static int EXPIRE = 3600 * 12;
+    /**
+     * 7天后过期 单位秒
+     */
+    private final static int EXPIRE = 3600 * 24 * 7;
 
 
     @Override
@@ -59,7 +62,11 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenDao, UserTokenEnt
             this.updateById(tokenEntity);
         }
 
-        R r = R.ok().put("token", token).put("expire", EXPIRE);
+        JSONObject object = new JSONObject();
+        object.put("Oauth-Token", token);
+        object.put("expire", EXPIRE);
+
+        R r = R.ok(object);
 
         return r;
     }

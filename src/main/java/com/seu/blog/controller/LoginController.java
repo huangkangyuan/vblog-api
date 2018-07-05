@@ -1,5 +1,6 @@
 package com.seu.blog.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.code.kaptcha.Producer;
 import com.seu.blog.entity.UserEntity;
 import com.seu.blog.form.LoginForm;
@@ -10,6 +11,7 @@ import com.seu.common.component.R;
 import com.seu.common.constant.Constant;
 import com.seu.common.exception.RRException;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -69,10 +72,10 @@ public class LoginController {
     }
 
     /**
-     * 登录
+     * 登录2(带验证码)
      */
-    @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody LoginForm form) throws IOException {
+    @PostMapping("/login2")
+    public Map<String, Object> login2(@RequestBody LoginForm form) throws IOException {
         // 获取Session中验证码
         if (StringUtils.isBlank(form.getUuid())){
             return R.error("参数uuid不能为空");
@@ -98,6 +101,83 @@ public class LoginController {
         //账号锁定
         if (Constant.UserStatus.PAUSE.getValue().equals(user.getStatus())) {
             return R.error("账号已被锁定,请联系管理员");
+        }
+
+        //生成token，并保存到数据库
+        R r = userTokenService.createToken(user.getId());
+        return r;
+    }
+
+    /**
+     * 用户登录(不带验证码)
+     *
+     * @param json
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody JSONObject json) throws IOException {
+        String account = json.getString("account");
+        String password = json.getString("password");
+        if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
+            return R.error("参数不对");
+        }
+
+        //用户信息
+        UserEntity user = userService.queryByUserAccount(account);
+
+        //账号不存在、密码错误
+        if (user == null || !user.getPassword().equals(new Sha256Hash(password, user.getSalt()).toHex())) {
+            return R.error("账号或密码不正确");
+        }
+
+        //账号锁定
+        if (Constant.UserStatus.PAUSE.getValue().equals(user.getStatus())) {
+            return R.error("账号已被锁定,请联系管理员");
+        }
+
+        //生成token，并保存到数据库
+        R r = userTokenService.createToken(user.getId());
+        return r;
+    }
+
+    /**
+     * 账号注册
+     *
+     * @param json
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/register")
+    public Map<String, Object> register(@RequestBody JSONObject json) throws IOException {
+        String account = json.getString("account");
+        String password = json.getString("password");
+        String nickname = json.getString("nickname");
+        if (StringUtils.isBlank(account) || StringUtils.isBlank(password) || StringUtils.isBlank(nickname)) {
+            return R.error("参数不对");
+        }
+
+        //用户信息
+        UserEntity user = userService.queryByUserAccount(account);
+
+        //账号已存在
+        if (user != null) {
+            return R.error("该账号已存在");
+        }
+
+        user = new UserEntity();
+        user.setAccount(account);
+        user.setAdmin(1);
+        user.setCreateTime(new Date());
+        user.setNickname(nickname);
+        user.setLastLoginTime(new Date());
+        user.setStatus(Constant.UserStatus.NORMAL.getValue());
+        String salt = RandomStringUtils.randomAlphanumeric(8);
+        user.setSalt(salt);
+        user.setPassword(new Sha256Hash(password, salt).toHex());
+        boolean insert = userService.insert(user);
+        if (!insert) {
+            return R.error("注册账号失败了");
         }
 
         //生成token，并保存到数据库
