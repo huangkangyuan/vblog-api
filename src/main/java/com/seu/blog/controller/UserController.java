@@ -1,14 +1,17 @@
 package com.seu.blog.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.seu.blog.entity.UserEntity;
 import com.seu.blog.service.UserService;
 import com.seu.common.component.R;
 import com.seu.common.utils.PageUtils;
+import com.seu.common.utils.ShiroUtils;
 import com.seu.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -21,10 +24,23 @@ import java.util.Map;
  * @date 2018-07-04 15:00:54
  */
 @RestController
-@RequestMapping("blog/user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping("/current")
+    public R getCurrentUser(HttpServletRequest request) {
+        UserEntity userEntity = ShiroUtils.getUserEntity();
+
+        JSONObject object = new JSONObject();
+        object.put("account", userEntity.getAccount());
+        object.put("nickname", userEntity.getNickname());
+        object.put("avatar", userEntity.getAvatar());
+        object.put("id", userEntity.getId());
+
+        return R.ok(object);
+    }
 
     /**
      * 列表

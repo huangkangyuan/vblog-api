@@ -24,7 +24,11 @@ public class ShiroUtils {
     }
 
     public static UserEntity getUserEntity() {
-        return (UserEntity) SecurityUtils.getSubject().getPrincipal();
+        UserEntity userEntity = (UserEntity) SecurityUtils.getSubject().getPrincipal();
+        if (userEntity == null) {
+            throw new RRException("您当前没有权限", 401);
+        }
+        return userEntity;
     }
 
     public static Long getUserId() {
