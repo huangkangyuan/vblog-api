@@ -3,6 +3,7 @@ package com.seu.blog.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.google.code.kaptcha.Producer;
 import com.seu.blog.entity.UserEntity;
+import com.seu.blog.entity.UserTokenEntity;
 import com.seu.blog.form.LoginForm;
 import com.seu.blog.service.UserService;
 import com.seu.blog.service.impl.CaptchaServiceImpl;
@@ -10,15 +11,16 @@ import com.seu.blog.service.impl.UserTokenServiceImpl;
 import com.seu.common.component.R;
 import com.seu.common.constant.Constant;
 import com.seu.common.exception.RRException;
+import com.seu.common.utils.ShiroUtils;
+import com.seu.shiro.TokenGenerator;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -183,6 +185,32 @@ public class LoginController {
         //生成token，并保存到数据库
         R r = userTokenService.createToken(user.getId());
         return r;
+    }
+
+    /**
+     * 退出登录
+     *
+     * @author liangfeihu
+     * @since 2018/2/1 15:30.
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public R logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        try {
+            Long userId = ShiroUtils.getUserId();
+            UserTokenEntity tokenEntity = ("where user_id=#{0}", UserToken.class, userId);
+            if (tokenEntity != null){
+                String token = TokenGenerator.generateValue();
+                tokenEntity.setToken(token);
+                tokenEntity.setExpireTime(new Date());
+                tokenEntity.setUpdateTime(new Date());
+                userService.update(tokenEntity);
+            }
+        } catch (Exception e) {
+            log.warn("退出登录, 更新token失败！", e);
+        }
+        return R.ok();
     }
 
 
