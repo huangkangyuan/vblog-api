@@ -1,6 +1,7 @@
 package com.seu.blog.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.google.code.kaptcha.Producer;
 import com.seu.blog.entity.UserEntity;
 import com.seu.blog.entity.UserTokenEntity;
@@ -13,6 +14,7 @@ import com.seu.common.constant.Constant;
 import com.seu.common.exception.RRException;
 import com.seu.common.utils.ShiroUtils;
 import com.seu.shiro.TokenGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -39,6 +41,7 @@ import java.util.Map;
  * @author liangfeihu
  * @since 2018/7/4 16:32.
  */
+@Slf4j
 @RestController
 public class LoginController {
     @Autowired
@@ -191,7 +194,7 @@ public class LoginController {
      * 退出登录
      *
      * @author liangfeihu
-     * @since 2018/2/1 15:30.
+     * @since 2018/7/1 15:30.
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public R logout() {
@@ -199,13 +202,13 @@ public class LoginController {
         subject.logout();
         try {
             Long userId = ShiroUtils.getUserId();
-            UserTokenEntity tokenEntity = ("where user_id=#{0}", UserToken.class, userId);
+            UserTokenEntity tokenEntity = userTokenService.selectOne(new EntityWrapper<UserTokenEntity>().eq("user_id", userId));
             if (tokenEntity != null){
                 String token = TokenGenerator.generateValue();
                 tokenEntity.setToken(token);
                 tokenEntity.setExpireTime(new Date());
                 tokenEntity.setUpdateTime(new Date());
-                userService.update(tokenEntity);
+                userTokenService.updateById(tokenEntity);
             }
         } catch (Exception e) {
             log.warn("退出登录, 更新token失败！", e);
