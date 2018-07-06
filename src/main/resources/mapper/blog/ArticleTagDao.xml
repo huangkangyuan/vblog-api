@@ -12,5 +12,10 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <select id="queryHotTagIds" parameterType="Integer" resultType="Integer">
+        select tag_id from vblog_article_tag GROUP BY tag_id ORDER BY count(*) desc
+          limit 0,#{limit}
+    </select>
+
 
 </mapper>

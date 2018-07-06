@@ -10,6 +10,7 @@ import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +31,18 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagDao, ArticleTag
         );
 
         return new PageUtils(page);
+    }
+
+    /**
+     * 查询最热标签
+     *
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Integer> queryHotTagIds(Integer limit){
+        List<Integer> hotTagIds = this.baseMapper.queryHotTagIds(limit);
+        return hotTagIds;
     }
 
 }

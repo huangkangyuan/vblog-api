@@ -4,6 +4,8 @@ import com.seu.blog.entity.ArticleTagEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 文章标签表
  *
@@ -13,6 +15,14 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ArticleTagDao extends BaseMapper<ArticleTagEntity> {
+
+    /**
+     * 查询最热标签
+     *
+     * @param limit
+     * @return
+     */
+    List<Integer> queryHotTagIds(Integer limit);
 
 }
 

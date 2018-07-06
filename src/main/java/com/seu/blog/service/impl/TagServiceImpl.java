@@ -10,6 +10,8 @@ import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +32,21 @@ public class TagServiceImpl extends ServiceImpl<TagDao, TagEntity> implements Ta
         );
 
         return new PageUtils(page);
+    }
+
+    /**
+     * 获取标签详情
+     *
+     * @param tagIds
+     * @return
+     */
+    @Override
+    public  List<TagEntity> queryHotTagDetails(Integer[] tagIds){
+        if (tagIds == null || tagIds.length <= 0){
+            return this.selectList(null);
+        } else {
+            return this.baseMapper.queryHotTagDetails(tagIds);
+        }
     }
 
 }

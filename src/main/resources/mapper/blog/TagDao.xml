@@ -11,5 +11,15 @@
         <result property="createTime" column="create_time"/>
     </resultMap>
 
+    <select id="queryHotTagDetails" resultType="com.seu.blog.entity.TagEntity">
+		select * from vblog_tag where  id in
+        <foreach item="tagId" collection="array" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        ORDER BY FIELD(id,
+        <foreach item="tagId" collection="array" separator="," close=")">
+            #{tagId}
+        </foreach>
+	</select>
 
 </mapper>
