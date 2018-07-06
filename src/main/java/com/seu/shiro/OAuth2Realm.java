@@ -5,6 +5,7 @@ import com.seu.blog.entity.UserTokenEntity;
 import com.seu.blog.service.ShiroService;
 import com.seu.common.constant.Base;
 import com.seu.common.constant.Constant;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -23,6 +24,7 @@ import java.util.Set;
  * @email liangfeihu@163.com
  * @date 2017-05-20 14:00
  */
+@Slf4j
 @Component
 public class OAuth2Realm extends AuthorizingRealm {
     @Autowired
@@ -74,6 +76,8 @@ public class OAuth2Realm extends AuthorizingRealm {
         }
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());
+        log.info("[Oauth-Token登录]token={},account={}", accessToken, user.getAccount());
+
         return info;
     }
 }

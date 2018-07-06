@@ -174,6 +174,7 @@ public class LoginController {
         user.setAccount(account);
         user.setAdmin(1);
         user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
         user.setNickname(nickname);
         user.setLastLoginTime(new Date());
         user.setStatus(Constant.UserStatus.NORMAL.getValue());

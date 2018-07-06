@@ -42,7 +42,7 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenDao, UserTokenEnt
         Date expireTime = new Date(now.getTime() + EXPIRE * 1000);
 
         //判断是否生成过token
-        UserTokenEntity tokenEntity = this.selectById(userId);
+        UserTokenEntity tokenEntity = this.selectOne(new EntityWrapper<UserTokenEntity>().eq("user_id", userId));
         if (tokenEntity == null) {
             tokenEntity = new UserTokenEntity();
             tokenEntity.setUserId(userId);
