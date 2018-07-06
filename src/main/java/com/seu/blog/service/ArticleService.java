@@ -1,9 +1,10 @@
 package com.seu.blog.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.service.IService;
-import com.seu.common.utils.PageUtils;
 import com.seu.blog.entity.ArticleEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +16,8 @@ import java.util.Map;
  */
 public interface ArticleService extends IService<ArticleEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    List<ArticleEntity> queryPage(Map<String, Object> params);
+
+    JSONArray getFormatArticleList(List<ArticleEntity> list);
 }
 

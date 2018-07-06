@@ -22,26 +22,26 @@ public class Query<T> extends LinkedHashMap<String, Object> {
     /**
      * 当前页码
      */
-    private int currPage = 1;
+    private int pageNo = 1;
     /**
      * 每页条数
      */
-    private int limit = 10;
+    private int pageSize = 10;
 
     public Query(Map<String, Object> params) {
         this.putAll(params);
 
         //分页参数
-        if (params.get("page") != null) {
-            currPage = Integer.parseInt((String) params.get("page"));
+        if (params.get("pageNo") != null) {
+            pageNo = Integer.parseInt((String) params.get("pageNo"));
         }
-        if (params.get("limit") != null) {
-            limit = Integer.parseInt((String) params.get("limit"));
+        if (params.get("pageSize") != null) {
+            pageSize = Integer.parseInt((String) params.get("pageSize"));
         }
 
-        this.put("offset", (currPage - 1) * limit);
-        this.put("page", currPage);
-        this.put("limit", limit);
+        this.put("offset", (pageNo - 1) * pageSize);
+        this.put("page", pageNo);
+        this.put("limit", pageSize);
 
         //防止SQL注入（因为sidx、order是通过拼接SQL实现排序的，会有SQL注入风险）
         String sidx = SQLFilter.sqlInject((String) params.get("sidx"));
@@ -50,7 +50,7 @@ public class Query<T> extends LinkedHashMap<String, Object> {
         this.put("order", order);
 
         //mybatis-plus分页
-        this.page = new Page<>(currPage, limit);
+        this.page = new Page<>(pageNo, pageSize);
 
         //排序
         if (StringUtils.isNotBlank(sidx) && StringUtils.isNotBlank(order)) {
@@ -64,11 +64,11 @@ public class Query<T> extends LinkedHashMap<String, Object> {
         return page;
     }
 
-    public int getCurrPage() {
-        return currPage;
+    public int getPageNo() {
+        return pageNo;
     }
 
-    public int getLimit() {
-        return limit;
+    public int getPageSize() {
+        return pageSize;
     }
 }

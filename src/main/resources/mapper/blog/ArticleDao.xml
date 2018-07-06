@@ -7,6 +7,7 @@
     <resultMap type="com.seu.blog.entity.ArticleEntity" id="articleMap">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
+        <result property="nickname" column="nickname"/>
         <result property="title" column="title"/>
         <result property="summary" column="summary"/>
         <result property="content" column="content"/>
@@ -14,6 +15,7 @@
         <result property="viewNum" column="view_num"/>
         <result property="commentNum" column="comment_num"/>
         <result property="weight" column="weight"/>
+        <result property="tags" column="tags"/>
         <result property="categoryId" column="category_id"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
