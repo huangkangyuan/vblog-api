@@ -3,14 +3,16 @@ package com.seu.blog.controller;
 import com.seu.blog.entity.TagEntity;
 import com.seu.blog.service.TagService;
 import com.seu.common.component.R;
-import com.seu.common.utils.PageUtils;
 import com.seu.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -21,7 +23,7 @@ import java.util.Map;
  * @date 2018-07-04 15:00:54
  */
 @RestController
-@RequestMapping("blog/tag")
+@RequestMapping("/tags")
 public class TagController {
     @Autowired
     private TagService tagService;
@@ -30,11 +32,9 @@ public class TagController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("blog:tag:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = tagService.queryPage(params);
-
-        return R.ok().put("page", page);
+    public R list(){
+        List<TagEntity> tagEntities = tagService.selectList(null);
+        return R.ok(tagEntities);
     }
 
     /**
