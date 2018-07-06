@@ -199,10 +199,10 @@ public class LoginController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public R logout() {
+        Long userId = ShiroUtils.getUserId();
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         try {
-            Long userId = ShiroUtils.getUserId();
             UserTokenEntity tokenEntity = userTokenService.selectOne(new EntityWrapper<UserTokenEntity>().eq("user_id", userId));
             if (tokenEntity != null){
                 String token = TokenGenerator.generateValue();
