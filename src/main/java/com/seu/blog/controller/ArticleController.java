@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.seu.blog.entity.ArticleEntity;
 import com.seu.blog.service.ArticleService;
+import com.seu.blog.service.ArticleTagService;
 import com.seu.blog.vo.ArticleArchivesVo;
+import com.seu.blog.vo.TagPageVo;
 import com.seu.common.component.R;
 import com.seu.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -33,15 +35,48 @@ public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private ArticleTagService articleTagService;
 
     /**
      * 列表 分页查询
      */
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
+        Integer tagId = (Integer)params.get("tagId");
+        if (tagId != null) {
+            TagPageVo tagPageVo = getTagPageVo(params, tagId);
+            List<ArticleEntity> articleEntities = articleTagService.queryArticlesByTag(tagPageVo);
+            JSONArray array = articleService.getFormatArticleList(articleEntities);
+            return R.ok(array);
+        }
+
         List<ArticleEntity> list = articleService.queryPage(params);
         JSONArray array = articleService.getFormatArticleList(list);
         return R.ok(array);
+    }
+
+    /**
+     * 构造分页参数
+     *
+     * @param params
+     * @param tagId
+     * @return
+     */
+    private TagPageVo getTagPageVo(Map<String, Object> params, Integer tagId){
+        Integer pageNo = (Integer) params.get("pageNo");
+        Integer  pageSize = (Integer) params.get("pageSize");
+        //分页参数
+        if (pageNo == null) {
+            pageNo = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 5;
+        }
+
+        Integer offset =  (pageNo - 1) * pageSize;
+        TagPageVo tagPageVo = new TagPageVo(offset, pageSize, tagId);
+        return tagPageVo;
     }
 
     /**

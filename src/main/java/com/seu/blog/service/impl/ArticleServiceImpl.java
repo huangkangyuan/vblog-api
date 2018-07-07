@@ -27,9 +27,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
 
     @Override
     public List<ArticleEntity> queryPage(Map<String, Object> params) {
+        EntityWrapper<ArticleEntity> entityWrapper = new EntityWrapper<ArticleEntity>();
+        Integer categoryId = (Integer) params.get("categoryId");
+        if (categoryId != null){
+            entityWrapper.eq("category_id", categoryId);
+        }
         Page<ArticleEntity> page = this.selectPage(
                 new Query<ArticleEntity>(params).getPage(),
-                new EntityWrapper<ArticleEntity>()
+                entityWrapper
         );
 
         return page.getRecords();

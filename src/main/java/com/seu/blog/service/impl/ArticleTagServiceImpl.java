@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.seu.blog.dao.ArticleTagDao;
+import com.seu.blog.entity.ArticleEntity;
 import com.seu.blog.entity.ArticleTagEntity;
 import com.seu.blog.service.ArticleTagService;
+import com.seu.blog.vo.TagPageVo;
 import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.Query;
 import org.springframework.stereotype.Service;
@@ -45,4 +47,14 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagDao, ArticleTag
         return hotTagIds;
     }
 
+    /**
+     * 根据标签查询文章
+     *
+     * @param tagPageVo
+     * @return
+     */
+    @Override
+    public List<ArticleEntity> queryArticlesByTag(TagPageVo tagPageVo) {
+        return this.baseMapper.queryArticlesByTag(tagPageVo);
+    }
 }

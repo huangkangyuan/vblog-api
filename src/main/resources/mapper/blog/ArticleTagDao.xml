@@ -17,5 +17,10 @@
           limit 0,#{limit}
     </select>
 
+    <select id="queryArticlesByTag" parameterType="com.seu.blog.vo.TagPageVo" resultType="com.seu.blog.entity.ArticleEntity">
+        select va.* from vblog_article_tag vat JOIN vblog_article va on va.id = vat.article_id
+        where vat.tag_id = #{tagId} LIMIT #{offset}, #{pageSize}
+    </select>
+
 
 </mapper>

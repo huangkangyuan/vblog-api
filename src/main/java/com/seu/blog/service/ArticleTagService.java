@@ -1,6 +1,8 @@
 package com.seu.blog.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.seu.blog.entity.ArticleEntity;
+import com.seu.blog.vo.TagPageVo;
 import com.seu.common.utils.PageUtils;
 import com.seu.blog.entity.ArticleTagEntity;
 
@@ -25,5 +27,13 @@ public interface ArticleTagService extends IService<ArticleTagEntity> {
      * @return
      */
     List<Integer> queryHotTagIds(Integer limit);
+
+    /**
+     * 根据标签查询文章
+     *
+     * @param tagPageVo
+     * @return
+     */
+    List<ArticleEntity> queryArticlesByTag(TagPageVo tagPageVo);
 }
 
