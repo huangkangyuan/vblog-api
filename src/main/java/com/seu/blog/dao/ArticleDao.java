@@ -1,8 +1,11 @@
 package com.seu.blog.dao;
 
-import com.seu.blog.entity.ArticleEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.seu.blog.entity.ArticleEntity;
+import com.seu.blog.vo.ArticleArchivesVo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * 文章表
@@ -13,6 +16,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ArticleDao extends BaseMapper<ArticleEntity> {
-
+    /**
+     * 发布文章按年-月汇总
+     *
+     * @param limit
+     * @return
+     */
+    List<ArticleArchivesVo> queyArticleArchives(int limit);
 }
 

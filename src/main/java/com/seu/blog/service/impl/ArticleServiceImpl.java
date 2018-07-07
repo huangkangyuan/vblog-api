@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.seu.blog.dao.ArticleDao;
 import com.seu.blog.entity.ArticleEntity;
 import com.seu.blog.service.ArticleService;
+import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.common.utils.Query;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         );
 
         return page.getRecords();
+    }
+
+    /**
+     * 发布文章按年-月汇总
+     *
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<ArticleArchivesVo> queyArticleArchives(int limit) {
+        return this.baseMapper.queyArticleArchives(limit);
     }
 
     /**

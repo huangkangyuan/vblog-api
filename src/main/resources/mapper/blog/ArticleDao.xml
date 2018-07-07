@@ -21,5 +21,10 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <select id="queyArticleArchives" parameterType="Integer" resultType="com.seu.blog.vo.ArticleArchivesVo">
+        select year(create_time) as year,month(create_time) as month,count(*) as count from vblog_article
+        group by year(create_time),month(create_time)
+        limit 0,#{limit}
+    </select>
 
 </mapper>

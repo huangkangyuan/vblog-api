@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.seu.blog.entity.ArticleEntity;
 import com.seu.blog.service.ArticleService;
+import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.common.component.R;
 import com.seu.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,13 +29,15 @@ import java.util.Map;
 @RequestMapping("/article")
 public class ArticleController {
     public static final int HOT_OR_NEW_ARTICLE_NUM = 6;
+    public static final int ARTICLE_ARCHIVE_LIMIT_NUM = 4;
+
     @Autowired
     private ArticleService articleService;
 
     /**
      * 列表 分页查询
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
         List<ArticleEntity> list = articleService.queryPage(params);
         JSONArray array = articleService.getFormatArticleList(list);
@@ -82,6 +85,15 @@ public class ArticleController {
             array.add(object);
         }
         return array;
+    }
+
+    /**
+     * 汇总查询
+     */
+    @GetMapping("/archives")
+    public R archives(){
+        List<ArticleArchivesVo> archivesVos = articleService.queyArticleArchives(ARTICLE_ARCHIVE_LIMIT_NUM);
+        return R.ok(archivesVos);
     }
 
     /**
