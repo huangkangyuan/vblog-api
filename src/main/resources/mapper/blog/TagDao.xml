@@ -22,4 +22,16 @@
         </foreach>
 	</select>
 
+    <select id="queryTagDetails" resultType="com.seu.blog.vo.TagVo">
+        SELECT vt.*, count(vat.tag_id) as articles from vblog_tag vt
+            LEFT JOIN vblog_article_tag vat on vt.id = vat.tag_id
+        GROUP BY vt.id
+    </select>
+
+    <select id="queryOneTagDetail" parameterType="Integer" resultType="com.seu.blog.vo.TagVo">
+        SELECT vt.*, count(vat.tag_id) as articles from vblog_tag vt
+        LEFT JOIN vblog_article_tag vat on vt.id = vat.tag_id
+        WHERE vat.tag_id = #{tagId}
+    </select>
+
 </mapper>

@@ -12,5 +12,17 @@
         <result property="createTime" column="create_time"/>
     </resultMap>
 
+    <select id="queryCategoryDetails" resultType="com.seu.blog.vo.CategoryVo">
+        select c.*, count(a.category_id) as articles from vblog_category c
+            left join vblog_article a on a.category_id = c.id
+        group by c.id
+    </select>
+
+    <select id="queryOneCategoryDetail" parameterType="Integer" resultType="com.seu.blog.vo.CategoryVo">
+        select c.*, count(a.category_id) as articles from vblog_category c
+        left join vblog_article a on a.category_id = c.id
+        where a.category_id = #{categoryId}
+    </select>
+
 
 </mapper>

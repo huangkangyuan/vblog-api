@@ -1,6 +1,7 @@
 package com.seu.blog.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.seu.blog.vo.TagVo;
 import com.seu.common.utils.PageUtils;
 import com.seu.blog.entity.TagEntity;
 
@@ -25,5 +26,19 @@ public interface TagService extends IService<TagEntity> {
      * @return
      */
     List<TagEntity> queryHotTagDetails(Integer[] tagIds);
+
+    /**
+     * 查询标签详情
+     *
+     * @return
+     */
+    List<TagVo> queryTagDetails();
+
+    /**
+     * 查询单条标签详情
+     *
+     * @return
+     */
+    TagVo queryOneTagDetail();
 }
 

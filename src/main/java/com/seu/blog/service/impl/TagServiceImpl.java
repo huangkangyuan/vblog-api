@@ -6,11 +6,11 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.seu.blog.dao.TagDao;
 import com.seu.blog.entity.TagEntity;
 import com.seu.blog.service.TagService;
+import com.seu.blog.vo.TagVo;
 import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,4 +49,23 @@ public class TagServiceImpl extends ServiceImpl<TagDao, TagEntity> implements Ta
         }
     }
 
+    /**
+     * 查询标签详情
+     *
+     * @return
+     */
+    @Override
+    public List<TagVo> queryTagDetails() {
+        return this.baseMapper.queryTagDetails();
+    }
+
+    /**
+     * 查询单条标签详情
+     *
+     * @return
+     */
+    @Override
+    public TagVo queryOneTagDetail() {
+        return this.baseMapper.queryOneTagDetail();
+    }
 }

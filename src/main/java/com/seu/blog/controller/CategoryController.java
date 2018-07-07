@@ -2,15 +2,15 @@ package com.seu.blog.controller;
 
 import com.seu.blog.entity.CategoryEntity;
 import com.seu.blog.service.CategoryService;
+import com.seu.blog.vo.CategoryVo;
 import com.seu.common.component.R;
-import com.seu.common.utils.PageUtils;
 import com.seu.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -21,7 +21,7 @@ import java.util.Map;
  * @date 2018-07-04 15:00:54
  */
 @RestController
-@RequestMapping("blog/category")
+@RequestMapping("/category")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
@@ -29,24 +29,30 @@ public class CategoryController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
-    @RequiresPermissions("blog:category:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryService.queryPage(params);
-
-        return R.ok().put("page", page);
+    @GetMapping("/list")
+    public R list(){
+        List<CategoryEntity> categoryEntityList = categoryService.selectList(null);
+        return R.ok(categoryEntityList);
     }
 
     /**
-     * 信息
+     * 分类详情
      */
-    @RequestMapping("/info/{id}")
-    @RequiresPermissions("blog:category:info")
-    public R info(@PathVariable("id") Integer id){
-        CategoryEntity category = categoryService.selectById(id);
-
-        return R.ok().put("category", category);
+    @GetMapping("/detail")
+    public R detail(){
+        List<CategoryVo> categoryVos = categoryService.queryCategoryDetails();
+        return R.ok(categoryVos);
     }
+
+    /**
+     * 单条分类详情
+     */
+    @GetMapping("/detail/{categoryId}")
+    public R detailById(@PathVariable("categoryId") Integer categoryId){
+        CategoryVo categoryVo = categoryService.queryOneCategoryDetail();
+        return R.ok(categoryVo);
+    }
+
 
     /**
      * 保存

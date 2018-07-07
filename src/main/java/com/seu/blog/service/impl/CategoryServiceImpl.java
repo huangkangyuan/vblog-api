@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.seu.blog.dao.CategoryDao;
 import com.seu.blog.entity.CategoryEntity;
 import com.seu.blog.service.CategoryService;
+import com.seu.blog.vo.CategoryVo;
 import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,4 +34,23 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return new PageUtils(page);
     }
 
+    /**
+     * 文章分类详情
+     *
+     * @return
+     */
+    @Override
+    public List<CategoryVo> queryCategoryDetails() {
+        return this.baseMapper.queryCategoryDetails();
+    }
+
+    /**
+     * 单条文章分类详情
+     *
+     * @return
+     */
+    @Override
+    public CategoryVo queryOneCategoryDetail() {
+        return this.baseMapper.queryOneCategoryDetail();
+    }
 }

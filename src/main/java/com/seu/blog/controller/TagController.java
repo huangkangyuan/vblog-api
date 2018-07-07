@@ -3,9 +3,9 @@ package com.seu.blog.controller;
 import com.seu.blog.entity.TagEntity;
 import com.seu.blog.service.ArticleTagService;
 import com.seu.blog.service.TagService;
+import com.seu.blog.vo.TagVo;
 import com.seu.common.component.R;
 import com.seu.common.validator.ValidatorUtils;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,15 +57,23 @@ public class TagController {
     }
 
     /**
-     * 信息
+     * 查询标签详情
      */
-    @RequestMapping("/info/{id}")
-    @RequiresPermissions("blog:tag:info")
-    public R info(@PathVariable("id") Integer id){
-        TagEntity tag = tagService.selectById(id);
-
-        return R.ok().put("tag", tag);
+    @GetMapping("/detail")
+    public R detail(){
+        List<TagVo> tagVos = tagService.queryTagDetails();
+        return R.ok(tagVos);
     }
+
+    /**
+     * 单条标签详情
+     */
+    @GetMapping("/detail/{tagId}")
+    public R detailById(@PathVariable("tagId") Integer tagId){
+        TagVo tagVo = tagService.queryOneTagDetail();
+        return R.ok(tagVo);
+    }
+
 
     /**
      * 保存

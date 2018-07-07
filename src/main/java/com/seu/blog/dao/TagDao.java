@@ -1,8 +1,8 @@
 package com.seu.blog.dao;
 
-import com.seu.blog.entity.TagEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import io.swagger.models.auth.In;
+import com.seu.blog.entity.TagEntity;
+import com.seu.blog.vo.TagVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,5 +23,19 @@ public interface TagDao extends BaseMapper<TagEntity> {
      * @return
      */
     List<TagEntity> queryHotTagDetails(Integer[] tagIds);
+
+    /**
+     * 查询标签详情
+     *
+     * @return
+     */
+    List<TagVo> queryTagDetails();
+
+    /**
+     * 查询单条标签详情
+     *
+     * @return
+     */
+    TagVo queryOneTagDetail();
 }
 
