@@ -49,7 +49,7 @@ public class CategoryController {
      */
     @GetMapping("/detail/{categoryId}")
     public R detailById(@PathVariable("categoryId") Integer categoryId){
-        CategoryVo categoryVo = categoryService.queryOneCategoryDetail();
+        CategoryVo categoryVo = categoryService.queryOneCategoryDetail(categoryId);
         return R.ok(categoryVo);
     }
 

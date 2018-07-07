@@ -39,6 +39,6 @@ public interface TagService extends IService<TagEntity> {
      *
      * @return
      */
-    TagVo queryOneTagDetail();
+    TagVo queryOneTagDetail(Integer tagId);
 }
 

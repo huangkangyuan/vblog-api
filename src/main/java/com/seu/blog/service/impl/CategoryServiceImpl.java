@@ -50,7 +50,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      * @return
      */
     @Override
-    public CategoryVo queryOneCategoryDetail() {
-        return this.baseMapper.queryOneCategoryDetail();
+    public CategoryVo queryOneCategoryDetail(Integer categoryId) {
+        return this.baseMapper.queryOneCategoryDetail(categoryId);
     }
 }

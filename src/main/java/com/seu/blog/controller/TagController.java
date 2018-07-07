@@ -70,7 +70,7 @@ public class TagController {
      */
     @GetMapping("/detail/{tagId}")
     public R detailById(@PathVariable("tagId") Integer tagId){
-        TagVo tagVo = tagService.queryOneTagDetail();
+        TagVo tagVo = tagService.queryOneTagDetail(tagId);
         return R.ok(tagVo);
     }
 

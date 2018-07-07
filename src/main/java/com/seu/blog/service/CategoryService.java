@@ -31,6 +31,6 @@ public interface CategoryService extends IService<CategoryEntity> {
      *
      * @return
      */
-    CategoryVo queryOneCategoryDetail();
+    CategoryVo queryOneCategoryDetail(Integer categoryId);
 }
 

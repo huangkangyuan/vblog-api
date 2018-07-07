@@ -65,7 +65,7 @@ public class TagServiceImpl extends ServiceImpl<TagDao, TagEntity> implements Ta
      * @return
      */
     @Override
-    public TagVo queryOneTagDetail() {
-        return this.baseMapper.queryOneTagDetail();
+    public TagVo queryOneTagDetail(Integer tagId) {
+        return this.baseMapper.queryOneTagDetail(tagId);
     }
 }

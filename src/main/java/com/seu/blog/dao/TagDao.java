@@ -36,6 +36,6 @@ public interface TagDao extends BaseMapper<TagEntity> {
      *
      * @return
      */
-    TagVo queryOneTagDetail();
+    TagVo queryOneTagDetail(Integer tagId);
 }
 

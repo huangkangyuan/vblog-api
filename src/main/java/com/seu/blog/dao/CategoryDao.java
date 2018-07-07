@@ -28,6 +28,6 @@ public interface CategoryDao extends BaseMapper<CategoryEntity> {
      *
      * @return
      */
-    CategoryVo queryOneCategoryDetail();
+    CategoryVo queryOneCategoryDetail(Integer categoryId);
 }
 
