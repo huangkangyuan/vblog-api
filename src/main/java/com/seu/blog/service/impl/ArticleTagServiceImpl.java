@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.seu.blog.dao.ArticleTagDao;
 import com.seu.blog.entity.ArticleEntity;
 import com.seu.blog.entity.ArticleTagEntity;
+import com.seu.blog.entity.TagEntity;
 import com.seu.blog.service.ArticleTagService;
 import com.seu.blog.vo.TagPageVo;
 import com.seu.common.utils.PageUtils;
@@ -56,5 +57,16 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagDao, ArticleTag
     @Override
     public List<ArticleEntity> queryArticlesByTag(TagPageVo tagPageVo) {
         return this.baseMapper.queryArticlesByTag(tagPageVo);
+    }
+
+    /**
+     * 获取文章所有标签
+     *
+     * @param articleId
+     * @return
+     */
+    @Override
+    public List<TagEntity> queryArticleTags(Long articleId) {
+        return this.baseMapper.queryArticleTags(articleId);
     }
 }

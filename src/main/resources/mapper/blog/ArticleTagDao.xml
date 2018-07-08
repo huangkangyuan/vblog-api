@@ -22,5 +22,9 @@
         where vat.tag_id = #{tagId} LIMIT #{offset}, #{pageSize}
     </select>
 
+    <select id="queryArticleTags" parameterType="Long" resultType="com.seu.blog.entity.TagEntity">
+        SELECT vt.* from vblog_article_tag vat INNER JOIN vblog_tag vt ON vat.tag_id=vt.id
+        where vat.article_id=#{articleId}
+    </select>
 
 </mapper>

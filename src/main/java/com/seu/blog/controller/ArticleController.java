@@ -5,8 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.seu.blog.entity.ArticleEntity;
+import com.seu.blog.entity.CategoryEntity;
+import com.seu.blog.entity.TagEntity;
+import com.seu.blog.entity.UserEntity;
 import com.seu.blog.service.ArticleService;
 import com.seu.blog.service.ArticleTagService;
+import com.seu.blog.service.CategoryService;
+import com.seu.blog.service.UserService;
 import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.blog.vo.TagPageVo;
 import com.seu.common.component.R;
@@ -38,6 +43,10 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private ArticleTagService articleTagService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CategoryService categoryService;
 
     /**
      * 列表 分页查询
@@ -134,14 +143,35 @@ public class ArticleController {
     }
 
     /**
-     * 信息
+     * 获取文章详情
      */
-    @RequestMapping("/info/{id}")
-    @RequiresPermissions("blog:article:info")
-    public R info(@PathVariable("id") Long id){
+    @GetMapping("/view/{id}")
+    public R oneArticleInfo(@PathVariable("id") Long id){
         ArticleEntity article = articleService.selectById(id);
+        JSONObject object = new JSONObject();
+        object.put("id", article.getId());
+        object.put("title", article.getTitle());
+        object.put("summary", article.getSummary());
+        object.put("createTime", article.getCreateTime());
+        object.put("viewNum", article.getViewNum());
+        object.put("commentNum", article.getCommentNum());
+        object.put("content", article.getContent());
 
-        return R.ok().put("article", article);
+        UserEntity userEntity = userService.selectById(article.getUserId());
+        JSONObject user = new JSONObject();
+        user.put("id", userEntity.getId());
+        user.put("avatar", userEntity.getAvatar());
+        user.put("nickname", userEntity.getNickname());
+
+        object.put("author", user);
+
+        CategoryEntity categoryEntity = categoryService.selectById(article.getCategoryId());
+        object.put("category", categoryEntity);
+
+        List<TagEntity> tagEntities = articleTagService.queryArticleTags(article.getId());
+        object.put("tags", tagEntities);
+
+        return R.ok(object);
     }
 
     /**

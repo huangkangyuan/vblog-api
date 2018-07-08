@@ -3,6 +3,7 @@ package com.seu.blog.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.seu.blog.entity.ArticleEntity;
 import com.seu.blog.entity.ArticleTagEntity;
+import com.seu.blog.entity.TagEntity;
 import com.seu.blog.vo.TagPageVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -33,6 +34,14 @@ public interface ArticleTagDao extends BaseMapper<ArticleTagEntity> {
      * @return
      */
     List<ArticleEntity> queryArticlesByTag(TagPageVo tagPageVo);
+
+    /**
+     * 获取文章所有标签
+     *
+     * @param articleId
+     * @return
+     */
+    List<TagEntity> queryArticleTags(Long articleId);
 
 }
 
