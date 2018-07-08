@@ -11,6 +11,7 @@ import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.blog.vo.TagPageVo;
 import com.seu.common.component.R;
 import com.seu.common.validator.ValidatorUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +44,9 @@ public class ArticleController {
      */
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        Integer tagId = (Integer)params.get("tagId");
-        if (tagId != null) {
+        String tagIdStr = (String) params.get("tagId");
+        if (StringUtils.isNotBlank(tagIdStr)) {
+            Integer tagId = Integer.parseInt(tagIdStr);
             TagPageVo tagPageVo = getTagPageVo(params, tagId);
             List<ArticleEntity> articleEntities = articleTagService.queryArticlesByTag(tagPageVo);
             JSONArray array = articleService.getFormatArticleList(articleEntities);
@@ -64,14 +66,14 @@ public class ArticleController {
      * @return
      */
     private TagPageVo getTagPageVo(Map<String, Object> params, Integer tagId){
-        Integer pageNo = (Integer) params.get("pageNo");
-        Integer  pageSize = (Integer) params.get("pageSize");
+        Integer pageNo = 1;
+        Integer  pageSize = 5;
         //分页参数
-        if (pageNo == null) {
-            pageNo = 1;
+        if (params.get("pageNo") != null) {
+            pageNo = Integer.parseInt((String) params.get("pageNo"));
         }
-        if (pageSize == null) {
-            pageSize = 5;
+        if (params.get("pageSize") != null) {
+            pageSize = Integer.parseInt((String) params.get("pageSize"));
         }
 
         Integer offset =  (pageNo - 1) * pageSize;

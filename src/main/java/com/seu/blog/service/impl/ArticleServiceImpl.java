@@ -10,6 +10,7 @@ import com.seu.blog.entity.ArticleEntity;
 import com.seu.blog.service.ArticleService;
 import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.common.utils.Query;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +29,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
     @Override
     public List<ArticleEntity> queryPage(Map<String, Object> params) {
         EntityWrapper<ArticleEntity> entityWrapper = new EntityWrapper<ArticleEntity>();
-        Integer categoryId = (Integer) params.get("categoryId");
-        if (categoryId != null){
+        String categoryIdStr = (String) params.get("categoryId");
+        if (StringUtils.isNotBlank(categoryIdStr)){
+            Integer categoryId = Integer.parseInt(categoryIdStr);
             entityWrapper.eq("category_id", categoryId);
         }
         Page<ArticleEntity> page = this.selectPage(
