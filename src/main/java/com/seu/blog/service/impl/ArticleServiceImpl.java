@@ -78,7 +78,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             object.put("title", article.getTitle());
             object.put("summary", article.getSummary());
             object.put("weight", article.getWeight());
-            object.put("tags", article.getTags());
+            object.put("tags", article.getTagArray());
             object.put("createTime", article.getCreateTime());
             object.put("viewNum", article.getViewNum());
             object.put("commentNum", article.getCommentNum());

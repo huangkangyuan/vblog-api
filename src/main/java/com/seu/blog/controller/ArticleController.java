@@ -4,26 +4,20 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.seu.blog.entity.ArticleEntity;
-import com.seu.blog.entity.CategoryEntity;
-import com.seu.blog.entity.TagEntity;
-import com.seu.blog.entity.UserEntity;
-import com.seu.blog.service.ArticleService;
-import com.seu.blog.service.ArticleTagService;
-import com.seu.blog.service.CategoryService;
-import com.seu.blog.service.UserService;
+import com.seu.blog.entity.*;
+import com.seu.blog.service.*;
 import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.blog.vo.TagPageVo;
 import com.seu.common.component.R;
+import com.seu.common.utils.ShiroUtils;
 import com.seu.common.validator.ValidatorUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -33,6 +27,7 @@ import java.util.Map;
  * @email liangfhhd@163.com
  * @date 2018-07-04 15:00:55
  */
+@Slf4j
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
@@ -43,6 +38,8 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private ArticleTagService articleTagService;
+    @Autowired
+    private TagService tagService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -143,7 +140,9 @@ public class ArticleController {
     }
 
     /**
-     * 获取文章详情
+     * 查看文章详情时：
+     *  获取文章详情
+     *  包含作者信息
      */
     @GetMapping("/view/{id}")
     public R oneArticleInfo(@PathVariable("id") Long id){
@@ -174,15 +173,112 @@ public class ArticleController {
         return R.ok(object);
     }
 
+
+    /**
+     * 编辑文章时：
+     *  通过文章Id获取文章详情
+     *  不需要用户信息
+     */
+    @GetMapping("/{id}")
+    public R getArticleById(@PathVariable("id") Long id){
+        ArticleEntity article = articleService.selectById(id);
+        JSONObject object = new JSONObject();
+        object.put("id", article.getId());
+        object.put("title", article.getTitle());
+        object.put("summary", article.getSummary());
+        object.put("content", article.getContent());
+
+        CategoryEntity categoryEntity = categoryService.selectById(article.getCategoryId());
+        object.put("category", categoryEntity);
+
+        List<TagEntity> tagEntities = articleTagService.queryArticleTags(article.getId());
+        object.put("tags", tagEntities);
+
+        return R.ok(object);
+    }
+
     /**
      * 保存
      */
-    @RequestMapping("/save")
-    @RequiresPermissions("blog:article:save")
-    public R save(@RequestBody ArticleEntity article){
-        articleService.insert(article);
+    @PostMapping("/publish")
+    public R save(@RequestBody JSONObject json){
+        UserEntity userEntity = ShiroUtils.getUserEntity();
+        Long id = json.getLong("id");
+        JSONObject category = json.getJSONObject("category");
+        JSONArray tags = json.getJSONArray("tags");
+        List<TagEntity> tagEntities = tagService.selectList(null);
+        Map<Integer, String> map = new HashMap<>();
+        for (TagEntity tag: tagEntities){
+            map.put(tag.getId(), tag.getTagName());
+        }
+        StringBuilder tagStr = new StringBuilder();
+        for (int i = 0; i < tags.size(); i++ ) {
+            Integer tagId = tags.getJSONObject(i).getInteger("id");
+            if (i != 0){
+                tagStr.append(",");
+            }
+            tagStr.append(map.get(tagId));
+        }
+        log.info("publish tags={}", tagStr.toString());
+        if (id != null){
+            //修改
+            ArticleEntity article = articleService.selectById(id);
+            article.setTitle(json.getString("title"));
+            article.setSummary(json.getString("summary"));
+            JSONObject body = json.getJSONObject("body");
+            article.setContent(body.getString("content"));
+            article.setContentHtml(body.getString("contentHtml"));
 
-        return R.ok();
+            if (article.getCategoryId().intValue() != category.getInteger("id").intValue()) {
+                article.setCategoryId(category.getInteger("id"));
+            }
+
+            article.setTags(tagStr.toString());
+            EntityWrapper<ArticleTagEntity> entityWrapper = new EntityWrapper<>();
+            entityWrapper.eq("article_id", id);
+            articleTagService.delete(entityWrapper);
+
+            article.setUpdateTime(new Date());
+            article.setUserId(userEntity.getId());
+            article.setNickname(userEntity.getNickname());
+            articleService.updateById(article);
+
+        } else {
+            //保存
+            ArticleEntity article = articleService.selectById(id);
+            article.setTitle(json.getString("title"));
+            article.setSummary(json.getString("summary"));
+            JSONObject body = json.getJSONObject("body");
+            article.setContent(body.getString("content"));
+            article.setContentHtml(body.getString("contentHtml"));
+            article.setCategoryId(category.getInteger("id"));
+            article.setUserId(userEntity.getId());
+            article.setNickname(userEntity.getNickname());
+            article.setCommentNum(0);
+            article.setViewNum(0);
+            article.setCreateTime(new Date());
+            article.setUpdateTime(new Date());
+            article.setWeight(0);
+            article.setTags(tagStr.toString());
+            articleService.insert(article);
+            id = article.getId();
+        }
+
+        List<ArticleTagEntity> articleTagEntityList = new ArrayList<>();
+        for (int i = 0; i < tags.size(); i++ ) {
+            Integer tagId = tags.getJSONObject(i).getInteger("id");
+            ArticleTagEntity articleTagEntity = new ArticleTagEntity();
+            articleTagEntity.setArticleId(id);
+            articleTagEntity.setTagId(tagId);
+            articleTagEntity.setCreateTime(new Date());
+            articleTagEntity.setUpdateTime(new Date());
+            articleTagEntityList.add(articleTagEntity);
+        }
+        articleTagService.insertBatch(articleTagEntityList);
+
+        JSONObject object = new JSONObject();
+        object.put("articleId", id);
+        return R.ok(object);
     }
 
     /**

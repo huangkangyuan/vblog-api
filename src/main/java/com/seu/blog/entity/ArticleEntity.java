@@ -251,11 +251,15 @@ public class ArticleEntity implements Serializable {
         this.nickname = nickname;
     }
 
-    public String[] getTags() {
-        return tags!= null ? tags.split(",") : null;
+    public String getTags() {
+        return tags;
     }
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public String[] getTagArray() {
+        return tags!= null ? tags.split(",") : null;
     }
 }
