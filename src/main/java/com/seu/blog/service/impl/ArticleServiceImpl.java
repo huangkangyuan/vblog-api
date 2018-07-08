@@ -34,6 +34,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             Integer categoryId = Integer.parseInt(categoryIdStr);
             entityWrapper.eq("category_id", categoryId);
         }
+
+        String year = (String) params.get("year");
+        String month = (String) params.get("month");
+        if (StringUtils.isNotBlank(year) && StringUtils.isNotBlank(month)) {
+            entityWrapper.eq("year(create_time)", year);
+            entityWrapper.eq("month(create_time)", month);
+        }
+
+
         Page<ArticleEntity> page = this.selectPage(
                 new Query<ArticleEntity>(params).getPage(),
                 entityWrapper

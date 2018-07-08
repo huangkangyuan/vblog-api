@@ -32,7 +32,7 @@ import java.util.Map;
 @RequestMapping("/article")
 public class ArticleController {
     public static final int HOT_OR_NEW_ARTICLE_NUM = 6;
-    public static final int ARTICLE_ARCHIVE_LIMIT_NUM = 4;
+    public static final int ARTICLE_ARCHIVE_LIMIT_NUM = 8;
 
     @Autowired
     private ArticleService articleService;
