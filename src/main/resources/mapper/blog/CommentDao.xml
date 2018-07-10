@@ -16,5 +16,14 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <select id="queryArticleComments"  parameterType="Long" resultType="com.seu.blog.vo.CommentVo">
+        SELECT vc.*, vu.avatar,vu.nickname FROM vblog_comment vc LEFT JOIN vblog_user vu ON vc.user_id=vu.id
+        WHERE vc.article_id=#{articleId} AND vc.level_flag='0' ORDER BY vc.create_time DESC
+    </select>
+
+    <select id="queryChildrenComments"  parameterType="com.seu.blog.dto.ChildCommentDto" resultType="com.seu.blog.vo.CommentVo">
+        SELECT vc.*, vu.avatar,vu.nickname FROM vblog_comment vc LEFT JOIN vblog_user vu ON vc.user_id=vu.id
+        WHERE vc.article_id=#{articleId} AND vc.parent_id=#{parentId} ORDER BY vc.create_time ASC
+    </select>
 
 </mapper>
