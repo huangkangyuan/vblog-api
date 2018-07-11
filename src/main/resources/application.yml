@@ -86,3 +86,6 @@ renren:
         expire: 604800
         header: token
 
+vblog:
+    upload:
+        path: /data
