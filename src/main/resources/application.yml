@@ -6,8 +6,8 @@ server:
         min-spare-threads: 30
     port: 8080
     connection-timeout: 5000ms
-    servlet:
-      context-path: /blog-fast
+#    servlet:
+#      context-path: /blog-fast
 
 spring:
     # 环境 dev|test|prod
