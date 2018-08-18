@@ -49,6 +49,8 @@ public class ArticleController {
      */
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
+        params.put("sidx", "view_num");
+        params.put("order", "DESC");
         String tagIdStr = (String) params.get("tagId");
         if (StringUtils.isNotBlank(tagIdStr)) {
             Integer tagId = Integer.parseInt(tagIdStr);
