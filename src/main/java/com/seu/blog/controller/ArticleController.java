@@ -74,7 +74,7 @@ public class ArticleController {
      */
     private TagPageVo getTagPageVo(Map<String, Object> params, Integer tagId){
         Integer pageNo = 1;
-        Integer  pageSize = 5;
+        Integer  pageSize = 10;
         //分页参数
         if (params.get("pageNo") != null) {
             pageNo = Integer.parseInt((String) params.get("pageNo"));
