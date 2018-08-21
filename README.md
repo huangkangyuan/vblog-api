@@ -1,5 +1,7 @@
 # vblog-api
 
+项目预览地址： https://blog.xiaoxinfq.com/
+
 #### 项目介绍
 VBlog 是一款基于最新技术开发的多人在线、简洁的博客系统。
 
