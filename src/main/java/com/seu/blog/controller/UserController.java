@@ -7,7 +7,6 @@ import com.seu.common.component.R;
 import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.ShiroUtils;
 import com.seu.common.validator.ValidatorUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +45,6 @@ public class UserController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("blog:user:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = userService.queryPage(params);
 
@@ -57,7 +55,6 @@ public class UserController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("blog:user:info")
     public R info(@PathVariable("id") Long id){
         UserEntity user = userService.selectById(id);
 
@@ -68,7 +65,6 @@ public class UserController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("blog:user:save")
     public R save(@RequestBody UserEntity user){
         userService.insert(user);
 
@@ -79,7 +75,6 @@ public class UserController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("blog:user:update")
     public R update(@RequestBody UserEntity user){
         ValidatorUtils.validateEntity(user);
         //全部更新
@@ -92,7 +87,6 @@ public class UserController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("blog:user:delete")
     public R delete(@RequestBody Long[] ids){
         userService.deleteBatchIds(Arrays.asList(ids));
 

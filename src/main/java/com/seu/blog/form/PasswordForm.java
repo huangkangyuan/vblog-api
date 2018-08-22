@@ -3,8 +3,8 @@ package com.seu.blog.form;
 /**
  * 密码表单
  *
- * @author Mark liangfeihu@163.com
- * @since 1.4.0 2018-01-25
+ * @author liangfeihu@163.com
+ * @since  2018-01-25
  */
 public class PasswordForm {
     /**

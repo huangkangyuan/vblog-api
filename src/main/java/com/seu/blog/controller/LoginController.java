@@ -82,11 +82,11 @@ public class LoginController {
     @PostMapping("/login2")
     public Map<String, Object> login2(@RequestBody LoginForm form) throws IOException {
         // 获取Session中验证码
-        if (StringUtils.isBlank(form.getUuid())){
+        if (StringUtils.isBlank(form.getUuid())) {
             return R.error("参数uuid不能为空");
         }
         String randCode = captchaService.getCaptcha(form.getUuid());
-        if (StringUtils.isBlank(randCode)){
+        if (StringUtils.isBlank(randCode)) {
             return R.error("图片验证码失效，请重新获取");
         }
         // 用户输入的验证码
@@ -204,7 +204,7 @@ public class LoginController {
         subject.logout();
         try {
             UserTokenEntity tokenEntity = userTokenService.selectOne(new EntityWrapper<UserTokenEntity>().eq("user_id", userId));
-            if (tokenEntity != null){
+            if (tokenEntity != null) {
                 String token = TokenGenerator.generateValue();
                 tokenEntity.setToken(token);
                 tokenEntity.setExpireTime(new Date());
@@ -216,8 +216,6 @@ public class LoginController {
         }
         return R.ok();
     }
-
-
 
 
 }

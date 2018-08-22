@@ -4,21 +4,24 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.seu.blog.entity.*;
-import com.seu.blog.service.*;
+import com.seu.blog.entity.ArticleEntity;
+import com.seu.blog.entity.UserEntity;
+import com.seu.blog.service.ArticleService;
+import com.seu.blog.service.ArticleTagService;
+import com.seu.blog.service.CategoryService;
+import com.seu.blog.service.TagService;
 import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.blog.vo.TagPageVo;
 import com.seu.common.component.R;
 import com.seu.common.exception.RRException;
 import com.seu.common.utils.ShiroUtils;
-import com.seu.common.validator.ValidatorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -48,7 +51,7 @@ public class ArticleController {
      * 列表 分页查询
      */
     @GetMapping("/list")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
         params.put("sidx", "view_num");
         params.put("order", "DESC");
         String tagIdStr = (String) params.get("tagId");
@@ -72,9 +75,9 @@ public class ArticleController {
      * @param tagId
      * @return
      */
-    private TagPageVo getTagPageVo(Map<String, Object> params, Integer tagId){
+    private TagPageVo getTagPageVo(Map<String, Object> params, Integer tagId) {
         Integer pageNo = 1;
-        Integer  pageSize = 10;
+        Integer pageSize = 10;
         //分页参数
         if (params.get("pageNo") != null) {
             pageNo = Integer.parseInt((String) params.get("pageNo"));
@@ -83,7 +86,7 @@ public class ArticleController {
             pageSize = Integer.parseInt((String) params.get("pageSize"));
         }
 
-        Integer offset =  (pageNo - 1) * pageSize;
+        Integer offset = (pageNo - 1) * pageSize;
         TagPageVo tagPageVo = new TagPageVo(offset, pageSize, tagId);
         return tagPageVo;
     }
@@ -109,7 +112,7 @@ public class ArticleController {
     /**
      * 获取最热或最新文章
      * type 可取 view_num 最热
-     *        create_time 最新
+     * create_time 最新
      *
      * @param type
      * @return
@@ -119,7 +122,7 @@ public class ArticleController {
         page.setOrderByField(type);
         page.setAsc(false);
 
-        Page<ArticleEntity> pageList = articleService.selectPage(page,new EntityWrapper<ArticleEntity>());
+        Page<ArticleEntity> pageList = articleService.selectPage(page, new EntityWrapper<ArticleEntity>());
 
         JSONArray array = new JSONArray();
         for (ArticleEntity article : pageList.getRecords()) {
@@ -135,20 +138,20 @@ public class ArticleController {
      * 汇总查询
      */
     @GetMapping("/archives")
-    public R archives(){
+    public R archives() {
         List<ArticleArchivesVo> archivesVos = articleService.queyArticleArchives(ARTICLE_ARCHIVE_LIMIT_NUM);
         return R.ok(archivesVos);
     }
 
     /**
      * 查看文章详情时：
-     *  获取文章详情
-     *  包含作者信息
-     *
-     *  要增加文章阅读数
+     * 获取文章详情
+     * 包含作者信息
+     * <p>
+     * 要增加文章阅读数
      */
     @GetMapping("/view/{id}")
-    public R oneArticleInfo(@PathVariable("id") Long id){
+    public R oneArticleInfo(@PathVariable("id") Long id) {
         JSONObject detailAndAddViewNum = articleService.getArticleDetailAndAddViewNum(id);
         return R.ok(detailAndAddViewNum);
     }
@@ -156,11 +159,11 @@ public class ArticleController {
 
     /**
      * 编辑文章时：
-     *  通过文章Id获取文章详情
-     *  不需要用户信息
+     * 通过文章Id获取文章详情
+     * 不需要用户信息
      */
     @GetMapping("/{id}")
-    public R getArticleById(@PathVariable("id") Long id){
+    public R getArticleById(@PathVariable("id") Long id) {
         ArticleEntity article = articleService.selectById(id);
         JSONObject object = new JSONObject();
         object.put("id", article.getId());
@@ -178,13 +181,13 @@ public class ArticleController {
      * 文章编辑与新增
      */
     @PostMapping("/publish")
-    public R save(@RequestBody JSONObject json){
+    public R save(@RequestBody JSONObject json) {
         UserEntity userEntity = ShiroUtils.getUserEntity();
         Long id = json.getLong("id");
-        if (id != null){
+        if (id != null) {
             //编辑文章
             ArticleEntity article = articleService.selectById(id);
-            if (article == null){
+            if (article == null) {
                 throw new RRException("参数错误");
             }
             articleService.updateOneArticle(userEntity, article, json);
@@ -198,28 +201,5 @@ public class ArticleController {
         return R.ok(object);
     }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("blog:article:update")
-    public R update(@RequestBody ArticleEntity article){
-        ValidatorUtils.validateEntity(article);
-        //全部更新
-        articleService.updateAllColumnById(article);
-        
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("blog:article:delete")
-    public R delete(@RequestBody Long[] ids){
-        articleService.deleteBatchIds(Arrays.asList(ids));
-
-        return R.ok();
-    }
 
 }

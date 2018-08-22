@@ -16,8 +16,6 @@ import com.seu.common.component.R;
 import com.seu.common.exception.RRException;
 import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.ShiroUtils;
-import com.seu.common.validator.ValidatorUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +49,7 @@ public class CommentController {
      * 获取某篇文章的评论
      */
     @RequestMapping("/article/{id}")
-    public R info(@PathVariable("id") Long id){
+    public R info(@PathVariable("id") Long id) {
         List<CommentVo> commentVos = commentService.queryArticleComments(id);
         JSONArray array = new JSONArray();
         for (CommentVo vo : commentVos) {
@@ -79,7 +77,7 @@ public class CommentController {
      * @param vo
      * @return
      */
-    private JSONObject formatCommentInfo(CommentVo vo){
+    private JSONObject formatCommentInfo(CommentVo vo) {
         JSONObject object = new JSONObject();
         object.put("id", vo.getId());
         object.put("level", vo.getLevelFlag());
@@ -95,7 +93,7 @@ public class CommentController {
      * @param commentVoList
      * @return
      */
-    private JSONArray formatChildCommentInfo(List<CommentVo> commentVoList){
+    private JSONArray formatChildCommentInfo(List<CommentVo> commentVoList) {
         JSONArray array = new JSONArray();
         for (CommentVo vo : commentVoList) {
             JSONObject object = formatCommentInfo(vo);
@@ -114,7 +112,7 @@ public class CommentController {
      * 发表评论
      */
     @PostMapping("/create/change")
-    public R save(@RequestBody JSONObject json){
+    public R save(@RequestBody JSONObject json) {
         UserEntity userEntity = ShiroUtils.getUserEntity();
 
         Long articleId = json.getJSONObject("article").getLong("id");
@@ -128,37 +126,22 @@ public class CommentController {
     }
 
 
-
     /**
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("blog:comment:list")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = commentService.queryPage(params);
 
         return R.ok().put("page", page);
     }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("blog:comment:update")
-    public R update(@RequestBody CommentEntity comment){
-        ValidatorUtils.validateEntity(comment);
-        //全部更新
-        commentService.updateAllColumnById(comment);
-        
-        return R.ok();
-    }
 
     /**
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("blog:comment:delete")
-    public R delete(@RequestBody Long[] ids){
+    public R delete(@RequestBody Long[] ids) {
         commentService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();

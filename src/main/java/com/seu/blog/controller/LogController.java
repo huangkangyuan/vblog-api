@@ -5,7 +5,6 @@ import com.seu.blog.service.LogService;
 import com.seu.common.component.R;
 import com.seu.common.utils.PageUtils;
 import com.seu.common.validator.ValidatorUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ import java.util.Map;
  * @date 2018-07-04 15:00:54
  */
 @RestController
-@RequestMapping("blog/log")
+@RequestMapping("/log")
 public class LogController {
     @Autowired
     private LogService logService;
@@ -30,8 +29,7 @@ public class LogController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("blog:log:list")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = logService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -41,8 +39,7 @@ public class LogController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("blog:log:info")
-    public R info(@PathVariable("id") Long id){
+    public R info(@PathVariable("id") Long id) {
         LogEntity log = logService.selectById(id);
 
         return R.ok().put("log", log);
@@ -52,8 +49,7 @@ public class LogController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("blog:log:save")
-    public R save(@RequestBody LogEntity log){
+    public R save(@RequestBody LogEntity log) {
         logService.insert(log);
 
         return R.ok();
@@ -63,12 +59,11 @@ public class LogController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("blog:log:update")
-    public R update(@RequestBody LogEntity log){
+    public R update(@RequestBody LogEntity log) {
         ValidatorUtils.validateEntity(log);
         //全部更新
         logService.updateAllColumnById(log);
-        
+
         return R.ok();
     }
 
@@ -76,8 +71,7 @@ public class LogController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("blog:log:delete")
-    public R delete(@RequestBody Long[] ids){
+    public R delete(@RequestBody Long[] ids) {
         logService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();

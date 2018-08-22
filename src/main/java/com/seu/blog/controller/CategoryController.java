@@ -5,7 +5,6 @@ import com.seu.blog.service.CategoryService;
 import com.seu.blog.vo.CategoryVo;
 import com.seu.common.component.R;
 import com.seu.common.validator.ValidatorUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +29,7 @@ public class CategoryController {
      * 列表
      */
     @GetMapping("/list")
-    public R list(){
+    public R list() {
         List<CategoryEntity> categoryEntityList = categoryService.selectList(null);
         return R.ok(categoryEntityList);
     }
@@ -39,7 +38,7 @@ public class CategoryController {
      * 分类详情
      */
     @GetMapping("/detail")
-    public R detail(){
+    public R detail() {
         List<CategoryVo> categoryVos = categoryService.queryCategoryDetails();
         return R.ok(categoryVos);
     }
@@ -48,7 +47,7 @@ public class CategoryController {
      * 单条分类详情
      */
     @GetMapping("/detail/{categoryId}")
-    public R detailById(@PathVariable("categoryId") Integer categoryId){
+    public R detailById(@PathVariable("categoryId") Integer categoryId) {
         CategoryVo categoryVo = categoryService.queryOneCategoryDetail(categoryId);
         return R.ok(categoryVo);
     }
@@ -58,8 +57,7 @@ public class CategoryController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("blog:category:save")
-    public R save(@RequestBody CategoryEntity category){
+    public R save(@RequestBody CategoryEntity category) {
         categoryService.insert(category);
 
         return R.ok();
@@ -69,12 +67,11 @@ public class CategoryController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("blog:category:update")
-    public R update(@RequestBody CategoryEntity category){
+    public R update(@RequestBody CategoryEntity category) {
         ValidatorUtils.validateEntity(category);
         //全部更新
         categoryService.updateAllColumnById(category);
-        
+
         return R.ok();
     }
 
@@ -82,8 +79,7 @@ public class CategoryController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("blog:category:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody Integer[] ids) {
         categoryService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();

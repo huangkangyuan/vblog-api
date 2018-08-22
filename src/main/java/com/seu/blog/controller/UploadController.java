@@ -2,8 +2,7 @@ package com.seu.blog.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.seu.common.component.R;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +21,9 @@ import java.util.UUID;
  * @author liangfeihu
  * @since 2018/7/10 18:19.
  */
+@Slf4j
 @RestController
 public class UploadController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
-
 
     @Value("${vblog.upload.path}")
     private String baseFolderPath;
@@ -62,7 +59,7 @@ public class UploadController {
 
             return R.ok(object);
         } catch (IOException e) {
-            logger.error("文件上传错误 , uri: {} , caused by: ", request.getRequestURI(), e);
+            log.error("文件上传错误 , uri: {} , caused by: ", request.getRequestURI(), e);
             return R.error("文件上传错误");
         }
     }

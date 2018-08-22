@@ -4,7 +4,7 @@ package com.seu.blog.form;
  * 登录表单
  *
  * @author liangfeihu@163.com
- * @since 2.0.0 2018-01-25
+ * @since 2018-01-25
  */
 public class LoginForm {
     private String username;
