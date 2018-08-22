@@ -1,6 +1,6 @@
 package com.seu.common.validator;
 
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -14,13 +14,13 @@ public abstract class Assert {
 
     public static void isBlank(String str, String message) {
         if (StringUtils.isBlank(str)) {
-            throw new RRException(message);
+            throw new RestException(message);
         }
     }
 
     public static void isNull(Object object, String message) {
         if (object == null) {
-            throw new RRException(message);
+            throw new RestException(message);
         }
     }
 }

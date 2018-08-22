@@ -7,29 +7,29 @@ package com.seu.common.exception;
  * @email liangfeihu@163.com
  * @date 2016年10月27日 下午10:11:27
  */
-public class RRException extends RuntimeException {
+public class RestException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     private String msg;
     private int code = 500;
 
-    public RRException(String msg) {
+    public RestException(String msg) {
         super(msg);
         this.msg = msg;
     }
 
-    public RRException(String msg, Throwable e) {
+    public RestException(String msg, Throwable e) {
         super(msg, e);
         this.msg = msg;
     }
 
-    public RRException(String msg, int code) {
+    public RestException(String msg, int code) {
         super(msg);
         this.msg = msg;
         this.code = code;
     }
 
-    public RRException(String msg, int code, Throwable e) {
+    public RestException(String msg, int code, Throwable e) {
         super(msg, e);
         this.msg = msg;
         this.code = code;

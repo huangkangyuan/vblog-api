@@ -13,7 +13,7 @@ import com.seu.blog.service.CommentService;
 import com.seu.blog.service.UserService;
 import com.seu.blog.vo.CommentVo;
 import com.seu.common.component.R;
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 import com.seu.common.utils.PageUtils;
 import com.seu.common.utils.ShiroUtils;
 import org.slf4j.Logger;
@@ -118,7 +118,7 @@ public class CommentController {
         Long articleId = json.getJSONObject("article").getLong("id");
         ArticleEntity articleEntity = articleService.selectById(articleId);
         if (articleEntity == null) {
-            throw new RRException("参数有误");
+            throw new RestException("参数有误");
         }
         JSONObject object = commentService.publishArticleComment(articleEntity, userEntity, json);
 

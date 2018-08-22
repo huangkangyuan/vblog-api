@@ -11,7 +11,7 @@ import com.seu.blog.service.impl.CaptchaServiceImpl;
 import com.seu.blog.service.impl.UserTokenServiceImpl;
 import com.seu.common.component.R;
 import com.seu.common.constant.Constant;
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 import com.seu.common.utils.ShiroUtils;
 import com.seu.shiro.TokenGenerator;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +62,7 @@ public class LoginController {
         response.setContentType("image/jpeg");
 
         if (StringUtils.isBlank(uuid)) {
-            throw new RRException("uuid不能为空");
+            throw new RestException("uuid不能为空");
         }
         //生成文字验证码
         String code = producer.createText();

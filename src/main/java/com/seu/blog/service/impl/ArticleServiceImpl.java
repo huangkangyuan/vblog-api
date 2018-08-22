@@ -9,7 +9,7 @@ import com.seu.blog.dao.ArticleDao;
 import com.seu.blog.entity.*;
 import com.seu.blog.service.*;
 import com.seu.blog.vo.ArticleArchivesVo;
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 import com.seu.common.utils.Query;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +109,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
     public JSONObject getArticleDetailAndAddViewNum(Long articleId) {
         ArticleEntity article = this.selectById(articleId);
         if (article == null) {
-            throw new RRException("该文章不存在");
+            throw new RestException("该文章不存在");
         }
 
         JSONObject object = new JSONObject();

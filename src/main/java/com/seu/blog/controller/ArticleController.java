@@ -13,7 +13,7 @@ import com.seu.blog.service.TagService;
 import com.seu.blog.vo.ArticleArchivesVo;
 import com.seu.blog.vo.TagPageVo;
 import com.seu.common.component.R;
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 import com.seu.common.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -188,7 +188,7 @@ public class ArticleController {
             //编辑文章
             ArticleEntity article = articleService.selectById(id);
             if (article == null) {
-                throw new RRException("参数错误");
+                throw new RestException("参数错误");
             }
             articleService.updateOneArticle(userEntity, article, json);
         } else {

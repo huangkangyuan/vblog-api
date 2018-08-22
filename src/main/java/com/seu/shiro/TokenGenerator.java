@@ -1,6 +1,6 @@
 package com.seu.shiro;
 
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 
 import java.security.MessageDigest;
 import java.util.UUID;
@@ -40,7 +40,7 @@ public class TokenGenerator {
             byte[] messageDigest = algorithm.digest();
             return toHexString(messageDigest);
         } catch (Exception e) {
-            throw new RRException("生成Token失败", e);
+            throw new RestException("生成Token失败", e);
         }
     }
 }

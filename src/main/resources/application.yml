@@ -73,7 +73,7 @@ mybatis-plus:
     cache-enabled: false
     call-setters-on-nulls: true
 
-renren:
+vblog:
     redis:
       open: true
     shiro:

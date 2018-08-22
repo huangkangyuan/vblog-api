@@ -1,6 +1,6 @@
 package com.seu.common.utils;
 
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 import com.seu.blog.entity.UserEntity;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -26,7 +26,7 @@ public class ShiroUtils {
     public static UserEntity getUserEntity() {
         UserEntity userEntity = (UserEntity) SecurityUtils.getSubject().getPrincipal();
         if (userEntity == null) {
-            throw new RRException("您当前没有权限", 401);
+            throw new RestException("您当前没有权限", 401);
         }
         return userEntity;
     }
@@ -50,7 +50,7 @@ public class ShiroUtils {
     public static String getKaptcha(String key) {
         Object kaptcha = getSessionAttribute(key);
         if (kaptcha == null) {
-            throw new RRException("验证码已失效");
+            throw new RestException("验证码已失效");
         }
         getSession().removeAttribute(key);
         return kaptcha.toString();

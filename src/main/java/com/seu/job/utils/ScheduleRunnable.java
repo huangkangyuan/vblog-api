@@ -1,6 +1,6 @@
 package com.seu.job.utils;
 
-import com.seu.common.exception.RRException;
+import com.seu.common.exception.RestException;
 import com.seu.common.component.SpringContextUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.ReflectionUtils;
@@ -39,7 +39,7 @@ public class ScheduleRunnable implements Runnable {
                 method.invoke(target);
             }
         } catch (Exception e) {
-            throw new RRException("执行定时任务失败", e);
+            throw new RestException("执行定时任务失败", e);
         }
     }
 
