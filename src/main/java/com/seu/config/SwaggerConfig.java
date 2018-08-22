@@ -45,10 +45,10 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("人人开源")
-                .description("blog-fast文档")
-                .termsOfServiceUrl("http://www.renren.io")
-                .version("2.0")
+                .title("VBlog开源博客")
+                .description("vblog-api文档")
+                .termsOfServiceUrl("https://blog.xiaoxinfq.com/")
+                .version("1.1")
                 .build();
     }
 
