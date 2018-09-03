@@ -4,7 +4,7 @@ server:
         uri-encoding: UTF-8
         max-threads: 1000
         min-spare-threads: 30
-    port: 7089
+    port: 8080
     connection-timeout: 5000ms
 #    servlet:
 #      context-path: /blog-fast
@@ -12,7 +12,7 @@ server:
 spring:
     # 环境 dev|test|prod
     profiles:
-        active: prod #dev
+        active: dev #prod
     # jackson时间格式化
     jackson:
         time-zone: GMT+8
