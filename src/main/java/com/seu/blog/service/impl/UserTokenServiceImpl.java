@@ -66,9 +66,7 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenDao, UserTokenEnt
         object.put("Oauth-Token", token);
         object.put("expire", EXPIRE);
 
-        R r = R.ok(object);
-
-        return r;
+        return R.ok(object);
     }
 
     @Override

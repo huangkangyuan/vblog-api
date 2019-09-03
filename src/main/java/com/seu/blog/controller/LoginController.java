@@ -109,8 +109,7 @@ public class LoginController {
         }
 
         //生成token，并保存到数据库
-        R r = userTokenService.createToken(user.getId());
-        return r;
+        return userTokenService.createToken(user.getId());
     }
 
     /**
@@ -142,8 +141,7 @@ public class LoginController {
         }
 
         //生成token，并保存到数据库
-        R r = userTokenService.createToken(user.getId());
-        return r;
+        return userTokenService.createToken(user.getId());
     }
 
     /**
@@ -187,8 +185,7 @@ public class LoginController {
         }
 
         //生成token，并保存到数据库
-        R r = userTokenService.createToken(user.getId());
-        return r;
+        return userTokenService.createToken(user.getId());
     }
 
     /**

@@ -67,13 +67,11 @@ public class CommentController {
             }
             array.add(object);
         }
-
         return R.ok(array);
     }
 
     /**
      * 格式化评论数据
-     *
      * @param vo
      * @return
      */

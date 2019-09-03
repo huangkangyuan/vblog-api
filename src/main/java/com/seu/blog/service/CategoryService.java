@@ -10,7 +10,6 @@ import java.util.Map;
 
 /**
  * 文章类别表
- *
  * @author liangfeihu
  * @email liangfhhd@163.com
  * @date 2018-07-04 15:00:54
@@ -21,15 +20,14 @@ public interface CategoryService extends IService<CategoryEntity> {
 
     /**
      * 文章分类详情
-     *
-     * @return
+     * @return List
      */
     List<CategoryVo> queryCategoryDetails();
 
     /**
      * 单条文章分类详情
      *
-     * @return
+     * @return CategoryVo
      */
     CategoryVo queryOneCategoryDetail(Integer categoryId);
 }

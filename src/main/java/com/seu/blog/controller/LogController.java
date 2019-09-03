@@ -22,6 +22,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/log")
 public class LogController {
+
     @Autowired
     private LogService logService;
 
@@ -31,7 +32,6 @@ public class LogController {
     @RequestMapping("/list")
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = logService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -41,7 +41,6 @@ public class LogController {
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id) {
         LogEntity log = logService.selectById(id);
-
         return R.ok().put("log", log);
     }
 
@@ -51,7 +50,6 @@ public class LogController {
     @RequestMapping("/save")
     public R save(@RequestBody LogEntity log) {
         logService.insert(log);
-
         return R.ok();
     }
 
@@ -63,7 +61,6 @@ public class LogController {
         ValidatorUtils.validateEntity(log);
         //全部更新
         logService.updateAllColumnById(log);
-
         return R.ok();
     }
 
@@ -73,7 +70,6 @@ public class LogController {
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] ids) {
         logService.deleteBatchIds(Arrays.asList(ids));
-
         return R.ok();
     }
 

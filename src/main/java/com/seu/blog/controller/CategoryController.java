@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
+
     @Autowired
     private CategoryService categoryService;
 
@@ -81,7 +82,6 @@ public class CategoryController {
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids) {
         categoryService.deleteBatchIds(Arrays.asList(ids));
-
         return R.ok();
     }
 
